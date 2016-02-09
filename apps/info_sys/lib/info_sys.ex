@@ -16,9 +16,10 @@ defmodule InfoSys do
   end
 
   def compute(query, opts \\ []) do
+    real_backends = opts[:backends] || @backends
     limit = opts[:limit] || 10
 
-    @backends
+    real_backends
      |> Enum.map(&spawn_query(&1, query, limit))
      |> await_results(opts)
      |> Enum.sort(&(&1.score >= &2.score))
